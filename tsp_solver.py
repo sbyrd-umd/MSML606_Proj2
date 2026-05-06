@@ -3,7 +3,8 @@
 
 
 # AI Usage Statement:
-# The only use of AI in this code is comment auto-filling and docstring generation.
+# The only use of AI in this code is comment auto-filling, docstring generation, 
+#   google search AI responses to figure out the best distance measurment for TSP..
 # Other than that, all code was written by hand without any AI assistance.
 
 
@@ -117,4 +118,78 @@ def build_distance_matrix(cities: list[dict]) -> list[list[float]]:
     return matrix
 
 
+# ---------------------------
+# 3.) Nearest Neighbor Algorithm |
+# ---------------------------
 
+def nearest_neighbor(cities: list[dict], dist_matrix: list[list[float]], start_index: int=0) -> tuple[list[int], float]:
+    """
+        Solves TSP with the Nearest Neighbor greedy heuristic.
+
+    Args:
+        cities (list[dict]): list of city dicts
+        dist_matrix (list[list[float]]): precomputed distance matrix
+        start_index (int, optional): index of starting city. Defaults to 0.
+
+    Returns:
+        tuple[list[int], float]: (tour, tour_length)
+            tour: list of city indices in the order they are visited
+            tour_length: total length of the tour in kilometres
+    """
+
+    n = len(cities)
+    visited = [False] * n
+    tour = [start_index]
+    tour_length = 0.0
+    visited[start_index] = True
+
+    for _ in range(1, n):
+        last_city = tour[-1]
+        next_city = None
+        min_dist = float("inf")
+        
+        for j in range(n):
+            if not visited[j] and dist_matrix[last_city][j] < min_dist:
+                min_dist = dist_matrix[last_city][j]
+                next_city = j
+
+        tour.append(next_city)
+        tour_length += min_dist
+        visited[next_city] = True
+
+    # return to start
+    tour.append(start_index)
+    tour_length += dist_matrix[next_city][start_index]
+
+    return tour, tour_length
+
+
+# ------------------
+# 4.) Visualization |
+# ------------------
+
+def plot_tour(cities: list[dict], tour: list[int]) -> None:
+    """
+        Plot the TSP tour route on a simple map using matplotlib
+
+    Args:
+        cities (list[dict]): list of city dicts
+        tour (list[int]): tour route as list of city indices
+    """
+    
+    # extract latitudes and longitudes in tour order
+    lats = [cities[i]["lat"] for i in tour]
+    lons = [cities[i]["lon"] for i in tour]
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(lons, lats, marker="o", linestyle="-", color="blue")
+    
+    # annotate city names
+    for i in tour:
+        plt.text(cities[i]["lon"], cities[i]["lat"], cities[i]["name"], fontsize=8)
+
+    plt.title("TSP Tour Route")
+    plt.xlabel("Longitude")
+    plt.ylabel("Latitude")
+    plt.grid()
+    plt.show()
