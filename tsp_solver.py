@@ -171,6 +171,9 @@ def nearest_neighbor(cities: list[dict], dist_matrix: list[list[float]], start_i
 def plot_tour(cities: list[dict], tour: list[int]) -> None:
     """
         Plot the TSP tour route on a simple map using matplotlib
+            Starting city is marked with green dot,
+            other cities marked with blue dots,
+            rout edges are shown as arrows.
 
     Args:
         cities (list[dict]): list of city dicts
@@ -182,7 +185,20 @@ def plot_tour(cities: list[dict], tour: list[int]) -> None:
     lons = [cities[i]["lon"] for i in tour]
 
     plt.figure(figsize=(10, 6))
-    plt.plot(lons, lats, marker="o", linestyle="-", color="blue")
+    
+    # highlight starting city
+    plt.scatter(cities[tour[0]]["lon"], cities[tour[0]]["lat"], color="green", s=100, label="Start/End")
+    
+    # plot other cities
+    for i in tour[1:-1]:
+        plt.scatter(cities[i]["lon"], cities[i]["lat"], color="blue", s=50)
+        
+    # plot tour edges
+    for i in range(len(tour) - 1):
+        plt.arrow(cities[tour[i]]["lon"], cities[tour[i]]["lat"],
+                  cities[tour[i + 1]]["lon"] - cities[tour[i]]["lon"],
+                  cities[tour[i + 1]]["lat"] - cities[tour[i]]["lat"],
+                  length_includes_head=True, head_width=0.2, alpha=0.5)
     
     # annotate city names
     for i in tour:
@@ -192,4 +208,42 @@ def plot_tour(cities: list[dict], tour: list[int]) -> None:
     plt.xlabel("Longitude")
     plt.ylabel("Latitude")
     plt.grid()
+    plt.legend()
     plt.show()
+    
+
+# ------------------------------------
+# Main function to run the TSP solver |
+# ------------------------------------
+
+def solve_tsp(filepath: str, sample_size: int=12) -> None:
+    # Step 1: Load cities
+    cities = load_cities(filepath, sample_size)
+
+    # Step 2: Build distance matrix
+    dist_matrix = build_distance_matrix(cities)
+
+    # Step 3: Solve TSP with nearest neighbor heuristic
+    route, total_dist = nearest_neighbor(cities, dist_matrix)
+
+    print("Tour route (city indices):", route)
+    print("Total tour distance (km):", total_dist)
+
+    # Step 4: Visualize the tour
+    plot_tour(cities, route)
+    
+    
+# ------------
+# Entry point |
+# ------------
+
+if __name__ == "__main__":
+    """
+        Usage: python tsp_solver.py <path_to_cities_csv>
+    """
+    if len(sys.argv) != 2:
+        print("Usage: python tsp_solver.py <path_to_cities_csv>")
+        sys.exit(1)
+
+    filepath = sys.argv[1]
+    solve_tsp(filepath, sample_size=12)
