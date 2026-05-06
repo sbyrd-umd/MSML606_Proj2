@@ -93,4 +93,28 @@ def haversine(city1: dict, city2: dict) -> float:
     
     return 6371 * c  # earth's radius in kilometres
 
+# build distance matrix
+def build_distance_matrix(cities: list[dict]) -> list[list[float]]:
+    """
+        Builds a distance matrix representation of the cities.
+        Matrix[i][j] = haversine distance between cities[i] and cities[j]
+    Args:
+        cities (list[dict]): list of city dicts
+
+    Returns:
+        list[list[float]]: distance matrix
+    """
+    
+    n = len(cities)
+    matrix = [[0.0] * n for _ in range(n)]  # initialize n x n matrix with zeros
+
+    for i in range(n):
+        for j in range(i + 1, n):
+            dist = haversine(cities[i], cities[j])
+            matrix[i][j] = dist
+            matrix[j][i] = dist  # symmetric
+
+    return matrix
+
+
 
