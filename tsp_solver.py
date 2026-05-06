@@ -3,8 +3,9 @@
 
 
 # AI Usage Statement:
-# The only use of AI in this code is comment auto-filling, docstring generation, 
-#   google search AI responses to figure out the best distance measurment for TSP..
+# The only use of AI in this code was comment auto complete (Most of the comments were written by hand, some words here and there were just auto filled/corrected by the auto complete feature of my code editor),
+# auto doc string format generation (the doc string was written by hand but the format is auto filled in when I typed triple quotes),
+# and google search AI responses to figure out the best distance measurment for TSP.
 # Other than that, all code was written by hand without any AI assistance.
 
 
@@ -118,9 +119,9 @@ def build_distance_matrix(cities: list[dict]) -> list[list[float]]:
     return matrix
 
 
-# ---------------------------
+# -------------------------------
 # 3.) Nearest Neighbor Algorithm |
-# ---------------------------
+# -------------------------------
 
 def nearest_neighbor(cities: list[dict], dist_matrix: list[list[float]], start_index: int=0) -> tuple[list[int], float]:
     """
@@ -241,7 +242,7 @@ def solve_tsp(filepath: str, sample_size: int=12) -> None:
 
 if __name__ == "__main__":
 
-    # Usage: python tsp_solver.py <path_to_cities_csv>
+    # usage: python tsp_solver.py <path_to_cities_csv>
     
     if len(sys.argv) != 2:
         print("Usage: python tsp_solver.py <path_to_cities_csv>")
