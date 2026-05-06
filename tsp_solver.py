@@ -240,9 +240,9 @@ def solve_tsp(filepath: str, sample_size: int=12) -> None:
 # ------------
 
 if __name__ == "__main__":
-    """
-        Usage: python tsp_solver.py <path_to_cities_csv>
-    """
+
+    # Usage: python tsp_solver.py <path_to_cities_csv>
+    
     if len(sys.argv) != 2:
         print("Usage: python tsp_solver.py <path_to_cities_csv>")
         sys.exit(1)
