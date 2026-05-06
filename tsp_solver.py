@@ -226,7 +226,9 @@ def solve_tsp(filepath: str, sample_size: int=12) -> None:
     # Step 3: Solve TSP with nearest neighbor heuristic
     route, total_dist = nearest_neighbor(cities, dist_matrix)
 
-    print("Tour route (city indices):", route)
+    print("Tour route (city indices):")
+    for idx in route:
+        print(f"  {cities[idx]['name']}, ({cities[idx]['lat']:.2f}, {cities[idx]['lon']:.2f})")
     print("Total tour distance (km):", total_dist)
 
     # Step 4: Visualize the tour
